@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigationHome">
+    <fragment
+        android:id="@+id/navigationHome"
+        android:name="com.example.kiwitexteditor.fragment.home.HomeFragment"
+        tools:layout="@layout/frag_home"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_navigationHome_to_navigationLibrary"
+            app:destination="@id/navigationLibrary" />
+        <action
+            android:id="@+id/action_navigationHome_to_navigationSaved"
+            app:destination="@id/navigationSaved" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigationLibrary"
+        android:name="com.example.kiwitexteditor.fragment.library.LibraryFragment"
+        tools:layout="@layout/frag_library"
+        android:label="LibraryFragment" >
+        <action
+            android:id="@+id/action_navigationLibrary_to_navigationEdit"
+            app:destination="@id/navigationEdit" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigationSave"
+        android:name="com.example.kiwitexteditor.fragment.save.SaveFragment"
+        tools:layout="@layout/frag_save"
+        android:label="SaveFragment" >
+        <action
+            android:id="@+id/action_navigationSave_to_navigationHome"
+            app:clearTask="true"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigationHome"
+            app:popUpToInclusive="true"
+            app:destination="@id/navigationHome" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigationSaved"
+        android:name="com.example.kiwitexteditor.fragment.saved.SavedFragment"
+        tools:layout="@layout/frag_saved"
+        android:label="SavedFragment" >
+        <action
+            android:id="@+id/action_navigationSaved_to_navigationLibrary"
+            app:destination="@id/navigationLibrary" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigationEdit"
+        android:name="com.example.kiwitexteditor.fragment.edit.EditFragment"
+        tools:layout="@layout/frag_edit"
+        android:label="EditFragment" >
+        <action
+            android:id="@+id/action_navigationEdit_to_navigationHome"
+            app:clearTask="true"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/navigationHome"
+            app:destination="@id/navigationHome" />
+        <action
+            android:id="@+id/action_navigationEdit_to_navigationSave"
+            app:destination="@id/navigationSave" />
+    </fragment>
+</navigation>

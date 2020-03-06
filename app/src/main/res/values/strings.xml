@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">KiwiTextEditor</string>
+    <string name="tvSplash">Kiwi Text Editor</string>
+    <string name="home">Home</string>
+    <string name="done">Done</string>
+    <string name="textonphoto">Text On Photo</string>
+    <string name="mywork">My Work</string>
+    <string name="save">Save photo</string>
+    <string name="saved">Save</string>
+    <string name="library">Library</string>
+    <string name="camera">Camera</string>
+    <string name="saveImage">Saved Image</string>
+    <string name="Donthave">You don\'t have any workart here </string>
+</resources>

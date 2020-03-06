@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.kiwitexteditor.ui.splash.SplashViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorWhile"
+        android:layout_height="match_parent"
+        tools:context=".ui.splash.SplashActivity">
+        <ImageView
+            android:id="@+id/ivSplash"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="40dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:src="@drawable/img_splash"
+            android:layout_width="@dimen/sizeImageSplash"
+            android:layout_height="@dimen/sizeImageSplash"/>
+        <TextView
+            android:id="@+id/tvSplash"
+            android:textSize="@dimen/textsizeSplash"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textColor="@color/colorTextviewSplash"
+            android:text="@string/tvSplash"
+            app:layout_constraintTop_toBottomOf="@id/ivSplash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

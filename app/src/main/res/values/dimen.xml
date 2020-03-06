@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="textsizeSplash">25sp</dimen>
+    <dimen name="textsizeTitle">20sp</dimen>
+    <dimen name="textsizeContent">15sp</dimen>
+    <dimen name="sizeImageSplash">200dp</dimen>
+</resources>
