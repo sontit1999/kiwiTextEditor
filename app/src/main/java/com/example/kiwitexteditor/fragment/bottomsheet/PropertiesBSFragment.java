@@ -1,6 +1,7 @@
 package com.example.kiwitexteditor.fragment.bottomsheet;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.kiwitexteditor.R;
 import com.example.kiwitexteditor.adapter.ColorPickerAdapter;
 import com.example.kiwitexteditor.adapter.EmojiAdapter;
+import com.example.kiwitexteditor.fragment.edit.EditFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import ja.burhanrashid52.photoeditor.PhotoEditor;
+
 public class PropertiesBSFragment extends BottomSheetDialogFragment implements SeekBar.OnSeekBarChangeListener {
-    private int currentColor;
-    public PropertiesBSFragment() {
+    public PropertiesBSFragment(PhotoEditor editor) {
         // Required empty public constructor
     }
 
@@ -62,9 +65,8 @@ public class PropertiesBSFragment extends BottomSheetDialogFragment implements S
             @Override
             public void onColorPickerClickListener(int colorCode) {
                 if (mProperties != null) {
-                    currentColor = colorCode;
                     dismiss();
-                    mProperties.onColorChanged(currentColor);
+                    mProperties.onColorChanged(colorCode);
                 }
             }
         });
@@ -101,4 +103,5 @@ public class PropertiesBSFragment extends BottomSheetDialogFragment implements S
     public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
+
 }

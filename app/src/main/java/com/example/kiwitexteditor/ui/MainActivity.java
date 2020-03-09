@@ -19,6 +19,7 @@ import com.example.kiwitexteditor.base.BaseFragment;
 import com.example.kiwitexteditor.callback.ActionbarListener;
 import com.example.kiwitexteditor.databinding.ActivityMainBinding;
 import com.example.kiwitexteditor.fragment.Fragment;
+import com.example.kiwitexteditor.fragment.edit.EditFragment;
 import com.example.kiwitexteditor.fragment.home.HomeFragment;
 import com.example.kiwitexteditor.fragment.library.LibraryFragment;
 import com.example.kiwitexteditor.ui.splash.main.MainViewModel;
@@ -66,5 +67,4 @@ public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewMode
             throw e;
         }
     }
-
 }

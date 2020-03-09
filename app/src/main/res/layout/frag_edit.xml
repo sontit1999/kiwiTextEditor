@@ -10,6 +10,7 @@
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:id="@+id/rootview"
         android:background="@color/colorbgEdit"
         android:layout_height="match_parent">
         <androidx.appcompat.widget.Toolbar
@@ -68,15 +69,33 @@
             android:src="@drawable/ic_redo"
             android:layout_width="@dimen/undo_size"
             android:layout_height="@dimen/undo_size"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="0dp" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvTool"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintRight_toRightOf="parent"
             tools:listitem="@layout/row_editing_tools"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFilter"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/row_filter_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,17 +9,25 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.ChangeBounds;
+import androidx.transition.TransitionManager;
 
 import com.bumptech.glide.Glide;
 import com.example.kiwitexteditor.R;
 import com.example.kiwitexteditor.adapter.EditingToolsAdapter;
+import com.example.kiwitexteditor.adapter.filter.FilterListener;
+import com.example.kiwitexteditor.adapter.filter.FilterViewAdapter;
 import com.example.kiwitexteditor.base.BaseFragment;
 import com.example.kiwitexteditor.databinding.FragEditBinding;
 import com.example.kiwitexteditor.fragment.bottomsheet.BottomSheetEmoji;
@@ -38,7 +46,7 @@ import java.util.Random;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoFilter;
 
-public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> implements EditingToolsAdapter.OnItemSelected {
+public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> implements EditingToolsAdapter.OnItemSelected, FilterListener {
     PhotoEditor mPhotoEditor;
     PropertiesBSFragment mPropertiesBSFragment;
     BottomSheetEmoji bottomSheetEmoji;
@@ -80,7 +88,7 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
 
     private void initview() {
         // init bottom sheet properties
-        mPropertiesBSFragment = new PropertiesBSFragment();
+        mPropertiesBSFragment = new PropertiesBSFragment(mPhotoEditor);
         mPropertiesBSFragment.setPropertiesChangeListener(new PropertiesBSFragment.Properties() {
             @Override
             public void onColorChanged(int colorCode) {
@@ -99,8 +107,14 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
         });
         // init recyclerview Tool
         binding.rvTool.setHasFixedSize(true);
-        binding.rvTool.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL,false));
+        RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(),6,RecyclerView.VERTICAL,false);
+        binding.rvTool.setLayoutManager(manager);
         binding.rvTool.setAdapter(new EditingToolsAdapter(this));
+        // init recyclerview Filter
+        binding.rvFilter.setHasFixedSize(true);
+        RecyclerView.LayoutManager manager1 = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
+        binding.rvFilter.setLayoutManager(manager1);
+        binding.rvFilter.setAdapter(new FilterViewAdapter(this));
         // init bottomsheet Emoji
         bottomSheetEmoji = new BottomSheetEmoji();
         bottomSheetEmoji.setEmojiBottomSheetListener(new BottomSheetEmoji.EmojiBottomSheetListener() {
@@ -176,7 +190,6 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
             case BRUSH:
                 mPhotoEditor.setBrushDrawingMode(true);
                 mPhotoEditor.setBrushSize(20);
-                mPhotoEditor.setBrushColor(getResources().getColor(R.color.yellow_color_picker));
                 mPropertiesBSFragment.show(getFragmentManager(), mPropertiesBSFragment.getTag());
                 break;
             case TEXT:
@@ -186,17 +199,46 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 mPhotoEditor.brushEraser();
                 break;
             case FILTER:
-                mPhotoEditor.setFilterEffect(PhotoFilter.CONTRAST);
-                Toast.makeText(getActivity(), "Filter Active", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), " Filter Actived", Toast.LENGTH_SHORT).show();
+                showFilter();
+                hiddenUndo();
+                hiddenRvTool();
                 break;
             case EMOJI:
                 bottomSheetEmoji.show(getFragmentManager(),bottomSheetEmoji.getTag());
-                Toast.makeText(getActivity(), "Emoji Active", Toast.LENGTH_SHORT).show();
                 break;
             case STICKER:
                 Toast.makeText(getActivity(), "Sticker Active", Toast.LENGTH_SHORT).show();
                 break;
         }
 
+    }
+
+    @Override
+    public void onFilterSelected(PhotoFilter photoFilter) {
+        mPhotoEditor.setFilterEffect(photoFilter);
+        hiddenFilter();
+        showRvTool();
+        showwUndo();
+    }
+    public void showFilter(){
+        binding.rvFilter.setVisibility(View.VISIBLE);
+    }
+    public void hiddenFilter(){
+        binding.rvFilter.setVisibility(View.GONE);
+    }
+    public void showRvTool(){
+        binding.rvTool.setVisibility(View.VISIBLE);
+    }
+    public void hiddenRvTool(){
+        binding.rvTool.setVisibility(View.GONE);
+    }
+    public void hiddenUndo(){
+        binding.ivRedo.setVisibility(View.INVISIBLE);
+        binding.ivUndo.setVisibility(View.INVISIBLE);
+    }
+    public void showwUndo(){
+        binding.ivRedo.setVisibility(View.VISIBLE);
+        binding.ivUndo.setVisibility(View.VISIBLE);
     }
 }
