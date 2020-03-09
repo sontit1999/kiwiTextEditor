@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.example.kiwitexteditor.R;
 import com.example.kiwitexteditor.base.BaseFragment;
 import com.example.kiwitexteditor.databinding.FragSaveBinding;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -66,7 +67,6 @@ public class SaveFragment extends BaseFragment<FragSaveBinding,SaveViewModel> {
         StrictMode.setVmPolicy(builder.build());
         checkpermisionns();
         binding.setViewmodel(viewmodel);
-        Glide.with(getContext()).load(urlImage).into(binding.ivSaveImage);
         binding.ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,30 +82,31 @@ public class SaveFragment extends BaseFragment<FragSaveBinding,SaveViewModel> {
         binding.tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bitmapDrawable = (BitmapDrawable) binding.ivSaveImage.getDrawable();
-                bitmap = bitmapDrawable.getBitmap();
-                FileOutputStream fileOutputStream = null;
-                File fileSave = Environment.getExternalStorageDirectory();
-                File directory = new File(fileSave.getAbsolutePath() + "/TextOnPhoto");
-                directory.mkdir();
-                String fileName = String.format("%d.jpg", System.currentTimeMillis());
-                File outFile = new File(directory, fileName);
-                try {
-                    fileOutputStream = new FileOutputStream(outFile);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                    fileOutputStream.flush();
-                    fileOutputStream.close();
-                    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    intent.setData(Uri.fromFile(outFile));
-                    getActivity().sendBroadcast(intent);
-                    Toast.makeText(getContext(), "bạn đã lưu ảnh thành công", Toast.LENGTH_SHORT).show();
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                deleteImage(urlImage);
+//                bitmapDrawable = (BitmapDrawable) binding.ivSaveImage.getSource().getDrawable();
+//                bitmap = bitmapDrawable.getBitmap();
+//                FileOutputStream fileOutputStream = null;
+//                File fileSave = Environment.getExternalStorageDirectory();
+//                File directory = new File(fileSave.getAbsolutePath() + "/TextOnPhoto");
+//                directory.mkdir();
+//                String fileName = String.format("%d.jpg", System.currentTimeMillis());
+//                File outFile = new File(directory, fileName);
+//                try {
+//                    fileOutputStream = new FileOutputStream(outFile);
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+//                    fileOutputStream.flush();
+//                    fileOutputStream.close();
+//                    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                    intent.setData(Uri.fromFile(outFile));
+//                    getActivity().sendBroadcast(intent);
+//                    Toast.makeText(getContext(), "bạn đã lưu ảnh thành công", Toast.LENGTH_SHORT).show();
+//
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                deleteImage(urlImage);
+                Snackbar.make(view,"Image save succesfully",Snackbar.LENGTH_LONG).show();
                 NavHostFragment.findNavController(SaveFragment.this).navigate(R.id.action_navigationSave_to_navigationHome);
             }
         });
@@ -119,10 +120,11 @@ public class SaveFragment extends BaseFragment<FragSaveBinding,SaveViewModel> {
 
     @Override
     public void ViewCreated() {
-
+       // Glide.with(getContext()).load(urlImage).into(binding.ivSaveImage);
+        Glide.with(getContext()).load(urlImage).into(binding.ivSaveImage.getSource());
     }
     private void shareImage() {
-        bitmapDrawable = (BitmapDrawable) binding.ivSaveImage.getDrawable();
+        bitmapDrawable = (BitmapDrawable) binding.ivSaveImage.getSource().getDrawable();
         bitmap = bitmapDrawable.getBitmap();
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("image/jpeg");

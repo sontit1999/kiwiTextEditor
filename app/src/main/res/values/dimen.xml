@@ -4,4 +4,10 @@
     <dimen name="textsizeTitle">20sp</dimen>
     <dimen name="textsizeContent">15sp</dimen>
     <dimen name="sizeImageSplash">200dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="editor_size">35dp</dimen>
+    <dimen name="undo_size">30dp</dimen>
+    <dimen name="normal_margin">8dp</dimen>
+    <dimen name="large_margin">16dp</dimen>
+    <dimen name="top_tool_icon_width">50dp</dimen>
 </resources>

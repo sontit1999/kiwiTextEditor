@@ -45,17 +45,39 @@
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
-        <ImageView
+        <ja.burhanrashid52.photoeditor.PhotoEditorView
                 android:id="@+id/ivPhoto"
                 app:layout_constraintTop_toBottomOf="@id/toolbar"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_margin="20dp"
                 android:src="@drawable/img_splash"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/ivUndo"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"/>
+        <ImageView
+            android:id="@+id/ivUndo"
+            app:layout_constraintBottom_toTopOf="@id/rvTool"
+            android:src="@drawable/ic_undo"
+            android:layout_marginRight="15dp"
+            app:layout_constraintRight_toLeftOf="@id/ivRedo"
+            android:layout_width="@dimen/undo_size"
+            android:layout_height="@dimen/undo_size"/>
+        <ImageView
+            android:id="@+id/ivRedo"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/rvTool"
+            android:src="@drawable/ic_redo"
+            android:layout_width="@dimen/undo_size"
+            android:layout_height="@dimen/undo_size"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTool"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:listitem="@layout/row_editing_tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

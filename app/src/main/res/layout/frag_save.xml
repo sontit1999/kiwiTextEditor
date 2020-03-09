@@ -47,7 +47,7 @@
             app:layout_constraintGuide_percent="0.5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-        <ImageView
+        <ja.burhanrashid52.photoeditor.PhotoEditorView
             android:id="@+id/ivSaveImage"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
