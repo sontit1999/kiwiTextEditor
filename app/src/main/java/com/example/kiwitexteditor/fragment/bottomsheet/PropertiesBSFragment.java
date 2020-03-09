@@ -5,18 +5,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kiwitexteditor.R;
 import com.example.kiwitexteditor.adapter.ColorPickerAdapter;
+import com.example.kiwitexteditor.adapter.EmojiAdapter;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class PropertiesBSFragment extends BottomSheetDialogFragment implements SeekBar.OnSeekBarChangeListener {
-
+    private int currentColor;
     public PropertiesBSFragment() {
         // Required empty public constructor
     }
@@ -59,12 +62,14 @@ public class PropertiesBSFragment extends BottomSheetDialogFragment implements S
             @Override
             public void onColorPickerClickListener(int colorCode) {
                 if (mProperties != null) {
+                    currentColor = colorCode;
                     dismiss();
-                    mProperties.onColorChanged(colorCode);
+                    mProperties.onColorChanged(currentColor);
                 }
             }
         });
         rvColor.setAdapter(colorPickerAdapter);
+
     }
 
     public void setPropertiesChangeListener(Properties properties) {

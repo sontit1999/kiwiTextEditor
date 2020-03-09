@@ -22,6 +22,7 @@ import com.example.kiwitexteditor.R;
 import com.example.kiwitexteditor.adapter.EditingToolsAdapter;
 import com.example.kiwitexteditor.base.BaseFragment;
 import com.example.kiwitexteditor.databinding.FragEditBinding;
+import com.example.kiwitexteditor.fragment.bottomsheet.BottomSheetEmoji;
 import com.example.kiwitexteditor.fragment.bottomsheet.PropertiesBSFragment;
 import com.example.kiwitexteditor.fragment.library.LibraryFragment;
 import com.example.kiwitexteditor.model.ToolType;
@@ -40,6 +41,7 @@ import ja.burhanrashid52.photoeditor.PhotoFilter;
 public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> implements EditingToolsAdapter.OnItemSelected {
     PhotoEditor mPhotoEditor;
     PropertiesBSFragment mPropertiesBSFragment;
+    BottomSheetEmoji bottomSheetEmoji;
     String urlImage ;
     @Override
     public Class<EditViewModel> getViewmodel() {
@@ -77,7 +79,7 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
     }
 
     private void initview() {
-
+        // init bottom sheet properties
         mPropertiesBSFragment = new PropertiesBSFragment();
         mPropertiesBSFragment.setPropertiesChangeListener(new PropertiesBSFragment.Properties() {
             @Override
@@ -95,10 +97,18 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 mPhotoEditor.setBrushSize(brushSize);
             }
         });
-
+        // init recyclerview Tool
         binding.rvTool.setHasFixedSize(true);
         binding.rvTool.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL,false));
         binding.rvTool.setAdapter(new EditingToolsAdapter(this));
+        // init bottomsheet Emoji
+        bottomSheetEmoji = new BottomSheetEmoji();
+        bottomSheetEmoji.setEmojiBottomSheetListener(new BottomSheetEmoji.EmojiBottomSheetListener() {
+            @Override
+            public void onEmojiClick(String emojiCode) {
+                mPhotoEditor.addEmoji(emojiCode);
+            }
+        });
     }
 
 
@@ -173,14 +183,14 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 Toast.makeText(getActivity(), " text Active", Toast.LENGTH_SHORT).show();
                 break;
             case ERASER:
-                Toast.makeText(getActivity(), "Eraser Active", Toast.LENGTH_SHORT).show();
+                mPhotoEditor.brushEraser();
                 break;
             case FILTER:
                 mPhotoEditor.setFilterEffect(PhotoFilter.CONTRAST);
                 Toast.makeText(getActivity(), "Filter Active", Toast.LENGTH_SHORT).show();
                 break;
             case EMOJI:
-                mPhotoEditor.addEmoji(PhotoEditor.getEmojis(getActivity()).get(new Random().nextInt(PhotoEditor.getEmojis(getActivity()).size())));
+                bottomSheetEmoji.show(getFragmentManager(),bottomSheetEmoji.getTag());
                 Toast.makeText(getActivity(), "Emoji Active", Toast.LENGTH_SHORT).show();
                 break;
             case STICKER:
