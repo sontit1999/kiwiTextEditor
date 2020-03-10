@@ -1,12 +1,16 @@
 package com.example.kiwitexteditor.fragment.edit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AnticipateOvershootInterpolator;
@@ -31,6 +35,7 @@ import com.example.kiwitexteditor.adapter.filter.FilterViewAdapter;
 import com.example.kiwitexteditor.base.BaseFragment;
 import com.example.kiwitexteditor.databinding.FragEditBinding;
 import com.example.kiwitexteditor.fragment.addtext.AddTextDialogFragment;
+import com.example.kiwitexteditor.fragment.bottomsheet.BottomSheetAddImage;
 import com.example.kiwitexteditor.fragment.bottomsheet.BottomSheetEmoji;
 import com.example.kiwitexteditor.fragment.bottomsheet.PropertiesBSFragment;
 import com.example.kiwitexteditor.fragment.library.LibraryFragment;
@@ -39,9 +44,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import ja.burhanrashid52.photoeditor.PhotoEditor;
@@ -52,6 +59,7 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
     PropertiesBSFragment mPropertiesBSFragment;
     BottomSheetEmoji bottomSheetEmoji;
     AddTextDialogFragment addTextDialogFragment;
+    BottomSheetAddImage bottomSheetAddImage;
     String urlImage ;
     @Override
     public Class<EditViewModel> getViewmodel() {
@@ -135,6 +143,14 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 mPhotoEditor.addText(text,colorcode);
             }
         });
+
+        bottomSheetAddImage = new BottomSheetAddImage();
+        bottomSheetAddImage.setStickerListener(new BottomSheetAddImage.StickerListener() {
+            @Override
+            public void onClickImage(Bitmap imageResource) {
+                mPhotoEditor.addImage(imageResource);
+            }
+        });
     }
 
 
@@ -160,12 +176,13 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
         binding.tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/TextOnPhoto");
+                directory.mkdir();
                 String fileName = String.format("%d.jpg", System.currentTimeMillis());
                 String pathImageSaved = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TextOnPhoto/" + fileName;
                 mPhotoEditor.saveAsFile(pathImageSaved, new PhotoEditor.OnSaveListener() {
                     @Override
                     public void onSuccess(@NonNull String imagePath) {
-                       // Snackbar.make(view,"Image Saved Successfully at :" + imagePath,Snackbar.LENGTH_LONG).show();
                         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                         intent.setData(Uri.fromFile(new File(imagePath)));
                         getActivity().sendBroadcast(intent);
@@ -180,9 +197,6 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                     }
                 });
 
-//                 Bundle bundle = new Bundle();
-//                 bundle.putString("uri",urlImage);
-//                 NavHostFragment.findNavController(EditFragment.this).navigate(R.id.action_navigationEdit_to_navigationSave,bundle);
             }
         });
     }
@@ -205,14 +219,12 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 mPropertiesBSFragment.show(getFragmentManager(), mPropertiesBSFragment.getTag());
                 break;
             case TEXT:
-                Toast.makeText(getActivity(), " text Active", Toast.LENGTH_SHORT).show();
                 addTextDialogFragment.show(getFragmentManager(),addTextDialogFragment.getTag());
                 break;
             case ERASER:
                 mPhotoEditor.brushEraser();
                 break;
             case FILTER:
-                Toast.makeText(getActivity(), " Filter Actived", Toast.LENGTH_SHORT).show();
                 showFilter();
                 hiddenUndo();
                 hiddenRvTool();
@@ -221,7 +233,10 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 bottomSheetEmoji.show(getFragmentManager(),bottomSheetEmoji.getTag());
                 break;
             case STICKER:
-                Toast.makeText(getActivity(), "Sticker Active", Toast.LENGTH_SHORT).show();
+//                Bitmap bitmap = getImagesPath(getActivity()).get(new Random().nextInt(getImagesPath(getActivity()).size()));
+//                Toast.makeText(getActivity(), "size bitmap: " + getImagesPath(getActivity()).size(), Toast.LENGTH_SHORT).show();
+               // mPhotoEditor.addImage(bitmap);
+                bottomSheetAddImage.show(getFragmentManager(),bottomSheetAddImage.getTag());
                 break;
         }
 
@@ -253,5 +268,47 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
     public void showwUndo(){
         binding.ivRedo.setVisibility(View.VISIBLE);
         binding.ivUndo.setVisibility(View.VISIBLE);
+    }
+    public static ArrayList<Bitmap> getImagesPath(Activity activity) {
+        Uri uri;
+        ArrayList<String> listOfAllImages = new ArrayList<String>();
+        Cursor cursor;
+        int column_index_data, column_index_folder_name;
+        String PathOfImage = null;
+        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        String[] projection = { MediaStore.MediaColumns.DATA,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME };
+
+        cursor = activity.getContentResolver().query(uri, projection, null,
+                null, null);
+
+        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        column_index_folder_name = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+        while (cursor.moveToNext()) {
+            PathOfImage = cursor.getString(column_index_data);
+
+            listOfAllImages.add(PathOfImage);
+        }
+        ArrayList<Bitmap> arrbitmap = new ArrayList<>();
+        for(String i : listOfAllImages){
+            Bitmap bitmap = getBitmap(i);
+            arrbitmap.add(bitmap);
+        }
+        return arrbitmap;
+    }
+
+    public static Bitmap getBitmap(String path) {
+        Bitmap bitmap=null;
+        try {
+            File f= new File(path);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap ;
     }
 }
