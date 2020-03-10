@@ -70,6 +70,10 @@ public class SaveFragment extends BaseFragment<FragSaveBinding,SaveViewModel> {
         binding.ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                deleteImage(urlImage);
+                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                intent.setData(Uri.fromFile(new File(urlImage)));
+                getActivity().sendBroadcast(intent);
                 NavHostFragment.findNavController(SaveFragment.this).navigateUp();
             }
         });
@@ -82,29 +86,6 @@ public class SaveFragment extends BaseFragment<FragSaveBinding,SaveViewModel> {
         binding.tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                bitmapDrawable = (BitmapDrawable) binding.ivSaveImage.getSource().getDrawable();
-//                bitmap = bitmapDrawable.getBitmap();
-//                FileOutputStream fileOutputStream = null;
-//                File fileSave = Environment.getExternalStorageDirectory();
-//                File directory = new File(fileSave.getAbsolutePath() + "/TextOnPhoto");
-//                directory.mkdir();
-//                String fileName = String.format("%d.jpg", System.currentTimeMillis());
-//                File outFile = new File(directory, fileName);
-//                try {
-//                    fileOutputStream = new FileOutputStream(outFile);
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-//                    fileOutputStream.flush();
-//                    fileOutputStream.close();
-//                    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//                    intent.setData(Uri.fromFile(outFile));
-//                    getActivity().sendBroadcast(intent);
-//                    Toast.makeText(getContext(), "bạn đã lưu ảnh thành công", Toast.LENGTH_SHORT).show();
-//
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
 //                deleteImage(urlImage);
                 Snackbar.make(view,"Image save succesfully",Snackbar.LENGTH_LONG).show();
                 NavHostFragment.findNavController(SaveFragment.this).navigate(R.id.action_navigationSave_to_navigationHome);
