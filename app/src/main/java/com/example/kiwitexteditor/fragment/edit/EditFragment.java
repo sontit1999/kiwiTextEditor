@@ -30,6 +30,7 @@ import com.example.kiwitexteditor.adapter.filter.FilterListener;
 import com.example.kiwitexteditor.adapter.filter.FilterViewAdapter;
 import com.example.kiwitexteditor.base.BaseFragment;
 import com.example.kiwitexteditor.databinding.FragEditBinding;
+import com.example.kiwitexteditor.fragment.addtext.AddTextDialogFragment;
 import com.example.kiwitexteditor.fragment.bottomsheet.BottomSheetEmoji;
 import com.example.kiwitexteditor.fragment.bottomsheet.PropertiesBSFragment;
 import com.example.kiwitexteditor.fragment.library.LibraryFragment;
@@ -50,6 +51,7 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
     PhotoEditor mPhotoEditor;
     PropertiesBSFragment mPropertiesBSFragment;
     BottomSheetEmoji bottomSheetEmoji;
+    AddTextDialogFragment addTextDialogFragment;
     String urlImage ;
     @Override
     public Class<EditViewModel> getViewmodel() {
@@ -123,6 +125,16 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 mPhotoEditor.addEmoji(emojiCode);
             }
         });
+
+
+        // init addtextDialog
+        addTextDialogFragment = new AddTextDialogFragment();
+        addTextDialogFragment.setListener(new AddTextDialogFragment.AddTextListener() {
+            @Override
+            public void addTextListener(String text, int colorcode) {
+                mPhotoEditor.addText(text,colorcode);
+            }
+        });
     }
 
 
@@ -194,6 +206,7 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 break;
             case TEXT:
                 Toast.makeText(getActivity(), " text Active", Toast.LENGTH_SHORT).show();
+                addTextDialogFragment.show(getFragmentManager(),addTextDialogFragment.getTag());
                 break;
             case ERASER:
                 mPhotoEditor.brushEraser();
