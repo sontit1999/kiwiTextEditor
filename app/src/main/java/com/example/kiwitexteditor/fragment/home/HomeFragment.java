@@ -77,7 +77,7 @@ public class HomeFragment extends BaseFragment<FragHomeBinding,HomeViewModel> {
         binding.containerSavedImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_navigationHome_to_navigationSaved);
+                    NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_navigationHome_to_navigationSaved);
             }
         });
     }

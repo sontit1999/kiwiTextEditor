@@ -70,23 +70,15 @@ public class SaveFragment extends BaseFragment<FragSaveBinding,SaveViewModel> {
         binding.ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteImage(urlImage);
-                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                intent.setData(Uri.fromFile(new File(urlImage)));
-                getActivity().sendBroadcast(intent);
-                NavHostFragment.findNavController(SaveFragment.this).navigateUp();
-            }
-        });
-        binding.tvTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                if(deleteImage(urlImage)){
+                    Snackbar.make(view,"Image not save to gallery",Snackbar.LENGTH_LONG).show();
+                };
                 NavHostFragment.findNavController(SaveFragment.this).navigateUp();
             }
         });
         binding.tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                deleteImage(urlImage);
                 Snackbar.make(view,"Image save succesfully",Snackbar.LENGTH_LONG).show();
                 NavHostFragment.findNavController(SaveFragment.this).navigate(R.id.action_navigationSave_to_navigationHome);
             }
@@ -129,15 +121,44 @@ public class SaveFragment extends BaseFragment<FragSaveBinding,SaveViewModel> {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, 124);
         }
     }
-    public void deleteImage(String pathImage){
+    public boolean deleteImage(String pathImage){
         File fdelete = new File(pathImage);
 
         if (fdelete.exists()) {
             if (fdelete.delete()) {
                 Log.d("test","Đã xóa");
+                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                intent.setData(Uri.fromFile(new File(pathImage)));
+                getActivity().sendBroadcast(intent);
+                return true;
             } else {
                 Log.d("test","Chưa xóa");
+                return false;
             }
         }
+        return false;
     }
+    public void saveImageFromImageView(ImageView imageView){
+        // get bitmap from imageview
+        BitmapDrawable Drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap bitmap = Drawable.getBitmap();
+        // create array contain image
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        // create file empty
+        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/TextOnPhoto");
+        directory.mkdir();
+        String fileName = String.format("%d.jpg", System.currentTimeMillis());
+        String pathImageSaved = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TextOnPhoto/" + fileName;
+        File f = new File(pathImageSaved);
+        try {
+            f.createNewFile();
+            // write image to file
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(bytes.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +39,7 @@ import com.example.kiwitexteditor.fragment.addtext.AddTextDialogFragment;
 import com.example.kiwitexteditor.fragment.bottomsheet.BottomSheetAddImage;
 import com.example.kiwitexteditor.fragment.bottomsheet.BottomSheetEmoji;
 import com.example.kiwitexteditor.fragment.bottomsheet.PropertiesBSFragment;
+import com.example.kiwitexteditor.fragment.home.HomeFragment;
 import com.example.kiwitexteditor.fragment.library.LibraryFragment;
 import com.example.kiwitexteditor.model.ToolType;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -55,6 +57,7 @@ import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoFilter;
 
 public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> implements EditingToolsAdapter.OnItemSelected, FilterListener {
+    NavController navController;
     PhotoEditor mPhotoEditor;
     PropertiesBSFragment mPropertiesBSFragment;
     BottomSheetEmoji bottomSheetEmoji;
@@ -84,7 +87,7 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
     @Override
     public void setBindingViewmodel() {
          binding.setViewmodel(viewmodel);
-
+         navController = NavHostFragment.findNavController(EditFragment.this);
     }
 
     @Override
@@ -170,7 +173,9 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
         binding.ivHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(EditFragment.this).navigate(R.id.action_navigationEdit_to_navigationHome);
+                if (navController.getCurrentDestination().getId() == R.id.navigationEdit){
+                    navController.navigate(R.id.action_navigationEdit_to_navigationHome);
+                }
             }
         });
         binding.tvSave.setOnClickListener(new View.OnClickListener() {
@@ -183,9 +188,11 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 mPhotoEditor.saveAsFile(pathImageSaved, new PhotoEditor.OnSaveListener() {
                     @Override
                     public void onSuccess(@NonNull String imagePath) {
+                        // update gallery
                         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                         intent.setData(Uri.fromFile(new File(imagePath)));
                         getActivity().sendBroadcast(intent);
+                        // tạo bundle r gửi path image
                         Bundle bundle = new Bundle();
                         bundle.putString("uri",imagePath);
                         NavHostFragment.findNavController(EditFragment.this).navigate(R.id.action_navigationEdit_to_navigationSave,bundle);
@@ -233,9 +240,6 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 bottomSheetEmoji.show(getFragmentManager(),bottomSheetEmoji.getTag());
                 break;
             case STICKER:
-//                Bitmap bitmap = getImagesPath(getActivity()).get(new Random().nextInt(getImagesPath(getActivity()).size()));
-//                Toast.makeText(getActivity(), "size bitmap: " + getImagesPath(getActivity()).size(), Toast.LENGTH_SHORT).show();
-               // mPhotoEditor.addImage(bitmap);
                 bottomSheetAddImage.show(getFragmentManager(),bottomSheetAddImage.getTag());
                 break;
         }

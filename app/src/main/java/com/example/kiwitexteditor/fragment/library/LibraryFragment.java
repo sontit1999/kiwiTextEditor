@@ -3,11 +3,13 @@ package com.example.kiwitexteditor.fragment.library;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -141,6 +143,7 @@ public class LibraryFragment extends BaseFragment<FragLibraryBinding,LibraryView
         }
     }
     private ArrayList<ImageFolder> getPicturePaths(){
+        resetExternalStorageMedia(getContext());
         ArrayList<ImageFolder> picFolders = new ArrayList<>();
         ArrayList<String> picPaths = new ArrayList<>();
         Uri allImagesuri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -223,5 +226,14 @@ public class LibraryFragment extends BaseFragment<FragLibraryBinding,LibraryView
             }
         }
         return "null";
+    }
+    static public boolean resetExternalStorageMedia(Context context) {
+        if (Environment.isExternalStorageEmulated())
+            return (false);
+        Uri uri = Uri.parse("file://" + Environment.getExternalStorageDirectory());
+        Intent intent = new Intent(Intent.ACTION_MEDIA_MOUNTED, uri);
+
+        context.sendBroadcast(intent);
+        return (true);
     }
 }
