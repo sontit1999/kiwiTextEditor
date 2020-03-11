@@ -11,9 +11,13 @@
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_navigationHome_to_navigationLibrary"
+            app:enterAnim="@anim/backfragment"
+            app:popExitAnim="@anim/enterfragment"
             app:destination="@id/navigationLibrary" />
         <action
             android:id="@+id/action_navigationHome_to_navigationSaved"
+            app:enterAnim="@anim/backfragment"
+            app:popExitAnim="@anim/enterfragment"
             app:destination="@id/navigationSaved" />
     </fragment>
     <fragment
@@ -22,6 +26,8 @@
         tools:layout="@layout/frag_library"
         android:label="LibraryFragment" >
         <action
+            app:enterAnim="@anim/backfragment"
+            app:popExitAnim="@anim/enterfragment"
             android:id="@+id/action_navigationLibrary_to_navigationEdit"
             app:destination="@id/navigationEdit" />
     </fragment>
@@ -33,6 +39,8 @@
         <action
             android:id="@+id/action_navigationSave_to_navigationHome"
             app:popUpTo="@id/navigationHome"
+            app:enterAnim="@anim/backfragment"
+            app:popExitAnim="@anim/enterfragment"
             app:popUpToInclusive="true"
             app:destination="@id/navigationHome" />
     </fragment>
@@ -43,6 +51,8 @@
         android:label="SavedFragment" >
         <action
             android:id="@+id/action_navigationSaved_to_navigationLibrary"
+            app:enterAnim="@anim/backfragment"
+            app:popExitAnim="@anim/enterfragment"
             app:destination="@id/navigationLibrary" />
     </fragment>
     <fragment
@@ -53,10 +63,14 @@
         <action
             android:id="@+id/action_navigationEdit_to_navigationHome"
             app:popUpTo="@id/navigationHome"
+            app:enterAnim="@anim/backfragment"
+            app:popExitAnim="@anim/enterfragment"
             app:popUpToInclusive="true"
             app:destination="@id/navigationHome" />
         <action
             android:id="@+id/action_navigationEdit_to_navigationSave"
+            app:enterAnim="@anim/backfragment"
+            app:popExitAnim="@anim/enterfragment"
             app:destination="@id/navigationSave" />
     </fragment>
 </navigation>

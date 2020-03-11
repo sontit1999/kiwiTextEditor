@@ -45,6 +45,7 @@
             android:id="@+id/rvPhotos"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layoutAnimation="@anim/layoutanimation"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
