@@ -32,8 +32,6 @@
         android:label="SaveFragment" >
         <action
             android:id="@+id/action_navigationSave_to_navigationHome"
-            app:clearTask="true"
-            app:launchSingleTop="true"
             app:popUpTo="@id/navigationHome"
             app:popUpToInclusive="true"
             app:destination="@id/navigationHome" />
@@ -54,9 +52,8 @@
         android:label="EditFragment" >
         <action
             android:id="@+id/action_navigationEdit_to_navigationHome"
-            app:clearTask="true"
-            app:popUpToInclusive="true"
             app:popUpTo="@id/navigationHome"
+            app:popUpToInclusive="true"
             app:destination="@id/navigationHome" />
         <action
             android:id="@+id/action_navigationEdit_to_navigationSave"
