@@ -80,7 +80,6 @@ public class AddTextDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 String text = edtAdd.getText().toString().trim();
-                Toast.makeText(getActivity(), text + " with color = " + colorcodeCurent , Toast.LENGTH_SHORT).show();
                 if(listener != null){
                     listener.addTextListener(text,colorcodeCurent);
                 }

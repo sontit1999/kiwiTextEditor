@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
@@ -44,6 +46,8 @@ import com.example.kiwitexteditor.fragment.bottomsheet.PropertiesBSFragment;
 import com.example.kiwitexteditor.fragment.home.HomeFragment;
 import com.example.kiwitexteditor.fragment.library.LibraryFragment;
 import com.example.kiwitexteditor.model.ToolType;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -66,6 +70,7 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
     AddTextDialogFragment addTextDialogFragment;
     BottomSheetAddImage bottomSheetAddImage;
     String urlImage ;
+    boolean statusClickSave = false;
     @Override
     public Class<EditViewModel> getViewmodel() {
         return EditViewModel.class;
@@ -91,11 +96,10 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
          binding.setViewmodel(viewmodel);
          navController = NavHostFragment.findNavController(EditFragment.this);
     }
-
     @Override
     public void ViewCreated() {
-        initview();
         initEditor();
+        initview();
         initEvent();
        // binding.ivPhoto.getSource().setImageURI(Uri.parse(urlImage));
         Glide.with(getContext()).load(urlImage).into(binding.ivPhoto.getSource());
@@ -183,29 +187,40 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
         binding.tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/TextOnPhoto");
-                directory.mkdir();
-                String fileName = String.format("%d.jpg", System.currentTimeMillis());
-                String pathImageSaved = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TextOnPhoto/" + fileName;
-                mPhotoEditor.saveAsFile(pathImageSaved, new PhotoEditor.OnSaveListener() {
-                    @Override
-                    public void onSuccess(@NonNull String imagePath) {
-                        // update gallery
-                        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                        intent.setData(Uri.fromFile(new File(imagePath)));
-                        getActivity().sendBroadcast(intent);
-                        // tạo bundle r gửi path image
-                        Bundle bundle = new Bundle();
-                        bundle.putString("uri",imagePath);
-                        NavHostFragment.findNavController(EditFragment.this).navigate(R.id.action_navigationEdit_to_navigationSave,bundle);
-                    }
+                   if(!statusClickSave){
+                       binding.spinKit.setVisibility(View.VISIBLE);
+                       File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/TextOnPhoto");
+                       directory.mkdir();
+                       String fileName = String.format("%d.jpg", System.currentTimeMillis());
+                       String pathImageSaved = Environment.getExternalStorageDirectory().getAbsolutePath() + "/TextOnPhoto/" + fileName;
+                       mPhotoEditor.saveAsFile(pathImageSaved, new PhotoEditor.OnSaveListener() {
+                           @Override
+                           public void onSuccess(@NonNull String imagePath) {
+                               binding.spinKit.setVisibility(View.GONE);
+                               // update gallery
+                               Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                               intent.setData(Uri.fromFile(new File(imagePath)));
+                               getActivity().sendBroadcast(intent);
+                               // tạo bundle r gửi path image
+                               Bundle bundle = new Bundle();
+                               bundle.putString("uri",imagePath);
+                               NavHostFragment.findNavController(EditFragment.this).navigate(R.id.action_navigationEdit_to_navigationSave,bundle);
+                           }
 
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Snackbar.make(view,"Failed to save Image",Snackbar.LENGTH_LONG).show();
-                    }
-                });
-
+                           @Override
+                           public void onFailure(@NonNull Exception exception) {
+                               binding.spinKit.setVisibility(View.GONE);
+                               Snackbar.make(view,"Failed to save Image",Snackbar.LENGTH_LONG).show();
+                           }
+                       });
+                       statusClickSave = true;
+                       new Handler().postDelayed(new Runnable() {
+                           @Override
+                           public void run() {
+                                statusClickSave = false;
+                           }
+                       },3000);
+                   }
             }
         });
     }
@@ -319,4 +334,5 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
         }
         return bitmap ;
     }
+
 }

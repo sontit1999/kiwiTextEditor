@@ -49,7 +49,6 @@ public class BottomSheetEmoji extends BottomSheetDialogFragment {
         emojiAdapter.setListener(new EmojiAdapter.EmojiListener() {
             @Override
             public void onEmojiClick(String emojiCode) {
-                Toast.makeText(getActivity(), "Click " + emojiCode, Toast.LENGTH_SHORT).show();
                 emojiBottomSheetListener.onEmojiClick(emojiCode);
                 dismiss();
             }
