@@ -6,6 +6,13 @@
     <string name="textonphoto">Text On Photo</string>
     <string name="mywork">My Work</string>
     <string name="save">Save photo</string>
+    <string name="setting">Setting</string>
+    <string name="version">VERSION 1.0.0</string>
+    <string name="update">Check for update</string>
+    <string name="feedback">Feedback</string>
+    <string name="share">Share App</string>
+    <string name="rate">Rate App</string>
+    <string name="privacy">Privacy Policy</string>
     <string name="saved">Save</string>
     <string name="library">Library</string>
     <string name="camera">Camera</string>

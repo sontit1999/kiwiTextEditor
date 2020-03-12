@@ -80,6 +80,12 @@ public class HomeFragment extends BaseFragment<FragHomeBinding,HomeViewModel> {
                     NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_navigationHome_to_navigationSaved);
             }
         });
+        binding.ivRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_navigationHome_to_navigationSetting);
+            }
+        });
     }
 
     @Override

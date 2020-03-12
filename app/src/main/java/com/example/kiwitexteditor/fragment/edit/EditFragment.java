@@ -13,6 +13,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Toast;
 
@@ -232,9 +234,9 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
                 mPhotoEditor.brushEraser();
                 break;
             case FILTER:
-                showFilter();
-                hiddenUndo();
+//                hiddenUndo();
                 hiddenRvTool();
+                showFilter();
                 break;
             case EMOJI:
                 bottomSheetEmoji.show(getFragmentManager(),bottomSheetEmoji.getTag());
@@ -255,6 +257,8 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
     }
     public void showFilter(){
         binding.rvFilter.setVisibility(View.VISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(getContext(),R.anim.backfragment);
+        binding.rvFilter.startAnimation(animation);
     }
     public void hiddenFilter(){
         binding.rvFilter.setVisibility(View.GONE);
@@ -263,7 +267,7 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
         binding.rvTool.setVisibility(View.VISIBLE);
     }
     public void hiddenRvTool(){
-        binding.rvTool.setVisibility(View.GONE);
+        binding.rvTool.setVisibility(View.INVISIBLE);
     }
     public void hiddenUndo(){
         binding.ivRedo.setVisibility(View.INVISIBLE);

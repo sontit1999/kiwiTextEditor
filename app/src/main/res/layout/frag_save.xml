@@ -82,8 +82,9 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="139dp" />
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/ShareandSave"
+                    android:orientation="horizontal"
                     android:layout_marginBottom="15dp"
                     android:layout_width="match_parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -94,34 +95,33 @@
                         android:textColor="@color/colorWhile"
                         android:textSize="@dimen/textsizeTitle"
                         android:textAllCaps="true"
+                        android:padding="15dp"
+                        android:gravity="end"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
                         android:background="@drawable/bg_share"
                         android:textStyle="bold"
-                        android:gravity="center"
-                        app:layout_constraintDimensionRatio="3:1"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
+                    <View
+                        android:id="@+id/view"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"/>
                     <TextView
                         android:id="@+id/tvSave"
                         android:text="Save"
-                        app:layout_constraintDimensionRatio="3:1"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:padding="15dp"
                         android:background="@drawable/bg_save"
                         android:textColor="@color/colorWhile"
                         android:textSize="@dimen/textsizeTitle"
                         android:textAllCaps="true"
                         android:textStyle="bold"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:gravity="center"
+                        android:gravity="start"
+                        android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
