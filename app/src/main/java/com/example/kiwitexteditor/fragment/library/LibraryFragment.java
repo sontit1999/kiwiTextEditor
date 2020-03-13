@@ -143,7 +143,6 @@ public class LibraryFragment extends BaseFragment<FragLibraryBinding,LibraryView
         }
     }
     private ArrayList<ImageFolder> getPicturePaths(){
-        resetExternalStorageMedia(getContext());
         ArrayList<ImageFolder> picFolders = new ArrayList<>();
         ArrayList<String> picPaths = new ArrayList<>();
         Uri allImagesuri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -226,14 +225,5 @@ public class LibraryFragment extends BaseFragment<FragLibraryBinding,LibraryView
             }
         }
         return "null";
-    }
-    static public boolean resetExternalStorageMedia(Context context) {
-        if (Environment.isExternalStorageEmulated())
-            return (false);
-        Uri uri = Uri.parse("file://" + Environment.getExternalStorageDirectory());
-        Intent intent = new Intent(Intent.ACTION_MEDIA_MOUNTED, uri);
-
-        context.sendBroadcast(intent);
-        return (true);
     }
 }
