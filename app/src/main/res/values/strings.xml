@@ -30,5 +30,10 @@
     <string name="msg_save_image">Are you want to exit without saving image ?</string>
     <string name="app_intent_name">PhotoEditor</string>
     <string name="msg_save_image_to_share">Please save image to share</string>
-    <string name="msg_share_image">Share Image</string>>
+    <string name="msg_share_image">Share Image</string>
+    <string name="idAdtrungian">ca-app-pub-3159028965186310/8862927454</string>
+    <string name="idAd">ca-app-pub-3159028965186310~7047761836</string>
+    <string name="bannerid">ca-app-pub-3159028965186310/6856190149</string>
+    <string name="bannerid2">ca-app-pub-3159028965186310/8301133758</string>
+    <string name="banneridTest">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

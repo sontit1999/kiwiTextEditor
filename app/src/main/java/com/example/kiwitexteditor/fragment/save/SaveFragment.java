@@ -26,6 +26,10 @@ import com.bumptech.glide.Glide;
 import com.example.kiwitexteditor.R;
 import com.example.kiwitexteditor.base.BaseFragment;
 import com.example.kiwitexteditor.databinding.FragSaveBinding;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -63,6 +67,10 @@ public class SaveFragment extends BaseFragment<FragSaveBinding,SaveViewModel> {
 
     @Override
     public void setBindingViewmodel() {
+        // load ad
+        AdRequest adRequest = new AdRequest.Builder().build();
+        binding.adView.loadAd(adRequest);
+
         StrictMode.VmPolicy.Builder  builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         checkpermisionns();

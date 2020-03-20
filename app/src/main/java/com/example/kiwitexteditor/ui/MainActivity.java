@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -23,6 +24,11 @@ import com.example.kiwitexteditor.fragment.edit.EditFragment;
 import com.example.kiwitexteditor.fragment.home.HomeFragment;
 import com.example.kiwitexteditor.fragment.library.LibraryFragment;
 import com.example.kiwitexteditor.ui.splash.main.MainViewModel;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding, MainViewModel>{
     static final int REQUEST_IMAGE_CAPTURE = 1;

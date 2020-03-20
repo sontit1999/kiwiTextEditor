@@ -48,6 +48,9 @@ import com.example.kiwitexteditor.fragment.library.LibraryFragment;
 import com.example.kiwitexteditor.model.ToolType;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -63,6 +66,9 @@ import ja.burhanrashid52.photoeditor.PhotoEditor;
 import ja.burhanrashid52.photoeditor.PhotoFilter;
 
 public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> implements EditingToolsAdapter.OnItemSelected, FilterListener {
+    private InterstitialAd mInterstitialAd;
+    String idAd = "ca-app-pub-3159028965186310/5483398720";
+    String idAdtest = "ca-app-pub-3940256099942544/1033173712";
     NavController navController;
     PhotoEditor mPhotoEditor;
     PropertiesBSFragment mPropertiesBSFragment;
@@ -93,8 +99,28 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
 
     @Override
     public void setBindingViewmodel() {
+
          binding.setViewmodel(viewmodel);
          navController = NavHostFragment.findNavController(EditFragment.this);
+
+        mInterstitialAd = new InterstitialAd(getContext());
+        mInterstitialAd.setAdUnitId(idAd);
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                Toast.makeText(getActivity(), "Fail to load ad", Toast.LENGTH_SHORT).show();
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+        });
+
     }
     @Override
     public void ViewCreated() {
@@ -187,6 +213,12 @@ public class EditFragment extends BaseFragment<FragEditBinding,EditViewModel> im
         binding.tvSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+                // show quang cao
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Toast.makeText(getActivity(), "Chưa load dc quảng cáo", Toast.LENGTH_SHORT).show();
+                }
                    if(!statusClickSave){
                        binding.spinKit.setVisibility(View.VISIBLE);
                        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/TextOnPhoto");
